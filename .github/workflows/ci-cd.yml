@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - project/dev
+      - master-to-do/
 
 jobs:
   test:
