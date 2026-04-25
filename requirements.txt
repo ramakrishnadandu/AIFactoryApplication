@@ -1,0 +1,24 @@
+fastapi==0.95.1
+uvicorn[standard]==0.22.0
+pydantic==1.10.7
+sqlalchemy==1.4.47
+asyncpg==0.27.0
+alembic==1.11.1
+httpx==0.24.1
+
+# Optional for CORS handling in FastAPI
+fastapi-cors==0.1.13
+
+# Optional tools for development and testing
+pytest==7.4.0
+pytest-asyncio==0.21.0
+black==23.3.0
+flake8==6.1.0
+
+# React + Vite dependencies
+# These would typically be in a package.json, not requirements.txt, but listed here for completeness
+react==18.2.0
+react-dom==18.2.0
+vite==4.0.4
+
+# Note: For a real project, ensure the front-end dependencies are managed separately in a package.json file.
