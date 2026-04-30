@@ -12,3 +12,6 @@ pytest==7.4.0
 pytest-asyncio==0.21.0
 black==23.3.0
 flake8==6.1.0
+
+# Added python version requirement to avoid environment mismatch
+# python_version >= '3.9'
