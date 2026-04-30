@@ -1,8 +1,8 @@
 # Start by defining the base image for the build stage
 FROM node:18 AS build-stage
 
-# Install Python 3.9.17 and pip explicitly
-RUN apk add --no-cache python3=3.9.17-r2 py3-pip && \
+# Install Python 3 and pip explicitly without pinning version to avoid cache miss
+RUN apk add --no-cache python3 py3-pip && \
     ln -sf python3 /usr/bin/python
 
 # Set the working directory
