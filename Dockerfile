@@ -1,11 +1,9 @@
 # Start by defining the base image for the build stage
 FROM node:18 AS build-stage
 
-# Install python3 and pip without version pinning to get latest available (includes python 3.9+)
-RUN apk add --no-cache python3 py3-pip
-
-# Set python3 as default python
-RUN ln -sf python3 /usr/bin/python
+# Install Python 3.9 and pip explicitly
+RUN apk add --no-cache python3=3.9.16-r2 py3-pip && \
+    ln -sf python3 /usr/bin/python
 
 # Set the working directory
 WORKDIR /app
