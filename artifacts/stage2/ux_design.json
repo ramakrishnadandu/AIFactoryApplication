@@ -1,0 +1,165 @@
+{
+  "design_system": {
+    "primary_color": "#6366f1",
+    "font_family": "Inter",
+    "border_radius": "8px",
+    "component_library": "shadcn|ant|material"
+  },
+  "information_architecture": {
+    "nav_structure": [
+      "Home",
+      "Habits",
+      "Analytics",
+      "Profile"
+    ],
+    "page_count": 5
+  },
+  "user_journeys": [
+    {
+      "journey_name": "Daily Develop",
+      "persona": {
+        "name": "Alex",
+        "age": 25,
+        "role": "Software Developer"
+      },
+      "steps": [
+        {
+          "step_name": "Login",
+          "description": "Log in to the application with username and password.",
+          "pain_points": [
+            "Forgetting login credentials"
+          ]
+        },
+        {
+          "step_name": "View Habits",
+          "description": "View a list of daily habits with progress.",
+          "pain_points": [
+            "Difficulty in tracking progress"
+          ]
+        },
+        {
+          "step_name": "Add Habit",
+          "description": "Create or add a new daily habit.",
+          "pain_points": [
+            "Not sure what habits to track"
+          ]
+        },
+        {
+          "step_name": "View Analytics",
+          "description": "View analytics on habit completion rates.",
+          "pain_points": [
+            "Difficulty in understanding data"
+          ]
+        },
+        {
+          "step_name": "Edit Profile",
+          "description": "Update profile information, such as name and location.",
+          "pain_points": [
+            "Outdated profile information"
+          ]
+        }
+      ],
+      "pain_points": [
+        "Difficulty in tracking progress",
+        "Outdated profile information"
+      ]
+    }
+  ],
+  "screens": [
+    {
+      "screen_name": "Login Screen",
+      "route": "/login",
+      "components": [
+        "username_input",
+        "password_input",
+        "login_button"
+      ],
+      "auth_required": true,
+      "description": "A screen for users to log in with their credentials."
+    },
+    {
+      "screen_name": "Habits Screen",
+      "route": "/habits",
+      "components": [
+        "habit_list",
+        "add_habit_button"
+      ],
+      "auth_required": false,
+      "description": "A screen for users to view and manage their daily habits."
+    },
+    {
+      "screen_name": "Add Habit Screen",
+      "route": "/habits/add",
+      "components": [
+        "habit_input",
+        "save_button"
+      ],
+      "auth_required": false,
+      "description": "A screen for users to create or add a new daily habit."
+    },
+    {
+      "screen_name": "Analytics Screen",
+      "route": "/analytics",
+      "components": [
+        "chart_graph",
+        "table_data"
+      ],
+      "auth_required": false,
+      "description": "A screen for users to view analytics on their habit completion rates."
+    },
+    {
+      "screen_name": "Edit Profile Screen",
+      "route": "/profile/edit",
+      "components": [
+        "name_input",
+        "location_input",
+        "save_button"
+      ],
+      "auth_required": true,
+      "description": "A screen for users to update their profile information."
+    }
+  ],
+  "component_specs": [
+    {
+      "name": "habit_list",
+      "type": "list",
+      "props": {
+        "data": "habits"
+      },
+      "variants": [
+        "grid",
+        "card"
+      ]
+    },
+    {
+      "name": "habit_input",
+      "type": "input",
+      "props": {
+        "type": "text"
+      },
+      "variants": [
+        "small",
+        "large"
+      ]
+    },
+    {
+      "name": "chart_graph",
+      "type": "graph",
+      "props": {
+        "data": "analytics_data"
+      },
+      "variants": [
+        "line_chart",
+        "bar_chart"
+      ]
+    }
+  ],
+  "accessibility": {
+    "wcag_level": "AA",
+    "features": [
+      "high Contrast Mode",
+      "Screen Reader Support"
+    ]
+  },
+  "responsive_strategy": "mobile_first"
+}
