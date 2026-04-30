@@ -1,6 +1,12 @@
 # Start by defining the base image for the build stage
 FROM node:18 AS build-stage
 
+# Install python 3.10 and pip to handle python dependencies
+RUN apk add --no-cache python3 py3-pip
+
+# Set python3 as default python
+RUN ln -sf python3 /usr/bin/python
+
 # Set the working directory
 WORKDIR /app
 
@@ -12,6 +18,10 @@ RUN npm install
 
 # Copy the rest of the application code
 COPY . .
+
+# Install python dependencies here if requirements.txt or similar exists
+# Assuming a requirements.txt file exists in project root
+RUN if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
 
 # Build the application
 RUN npm run build
