@@ -1,11 +1,8 @@
 # Start by defining the base image for the build stage
-FROM node:18 AS build-stage
+FROM python:3.9-slim AS build-stage
 
-# Install python3 and pip without version pinning to get latest available (includes python 3.9+)
-RUN apk add --no-cache python3 py3-pip
-
-# Set python3 as default python
-RUN ln -sf python3 /usr/bin/python
+# Install node and npm
+RUN apt-get update && apt-get install -y nodejs npm && npm install -g npm@latest && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory
 WORKDIR /app
@@ -21,7 +18,7 @@ COPY . .
 
 # Install python dependencies here if requirements.txt or similar exists
 # Assuming a requirements.txt file exists in project root
-RUN if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
+RUN if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
 # Build the application
 RUN npm run build
