@@ -1,20 +1,35 @@
-# Start by defining the base image for the build stage
-FROM node:18 AS build-stage
+# Start by defining the base image for the build stage with Node and Python 3.10
+FROM python:3.10-slim AS build-stage
 
 # Set the working directory
 WORKDIR /app
 
-# Copy the package.json and package-lock.json (or yarn.lock) to install dependencies
+# Install Node.js 18 (needed for the app build) and curl for installing Node
+RUN apt-get update && apt-get install -y curl && \
+    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copy package.json and package-lock.json
 COPY package*.json ./
 
-# Install app dependencies
+# Install Node dependencies
 RUN npm install
+
+# Copy Python requirements file
+COPY requirements.txt ./
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application code
 COPY . .
 
 # Build the application
 RUN npm run build
+
+# (Optional) Run tests
+# RUN npm test or python -m pytest
 
 # Start a new stage from a smaller base image for deployment
 FROM nginx:alpine AS production-stage
