@@ -1,8 +1,11 @@
 # Start by defining the base image for the build stage
 FROM node:18 AS build-stage
 
-# Install python 3.10 and pip to handle python dependencies
-RUN apk add --no-cache python3 py3-pip
+# Add community repository and update apk indexes for python3.10 installation
+RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && apk update
+
+# Install python3.10 and pip3 explicitly to meet package requirements
+RUN apk add --no-cache python3=3.10.12-r0 py3-pip
 
 # Set python3 as default python
 RUN ln -sf python3 /usr/bin/python
