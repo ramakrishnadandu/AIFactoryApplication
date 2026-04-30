@@ -1,0 +1,117 @@
+{
+  "architecture_pattern": "microservices",
+  "system_components": [
+    {
+      "name": "User Service",
+      "type": "service",
+      "responsibility": "Handles user registration, authentication and profile management.",
+      "tech": "Express",
+      "port": 8001
+    },
+    {
+      "name": "Habit Service",
+      "type": "service",
+      "responsibility": "Enables users to add, edit, delete, and track daily habits.",
+      "tech": "Express",
+      "port": 8002
+    },
+    {
+      "name": "Analytics Service",
+      "type": "service",
+      "responsibility": "Generates analytics on habit completion rates.",
+      "tech": "Express",
+      "port": 8003
+    },
+    {
+      "name": "PostgreSQL Database",
+      "type": "database",
+      "responsibility": "Stores user and habit data.",
+      "tech": "PostgreSQL",
+      "port": 5432
+    },
+    {
+      "name": "Redis Cache",
+      "type": "cache",
+      "responsibility": "Caches frequently accessed user data for performance.",
+      "tech": "Redis",
+      "port": 6379
+    },
+    {
+      "name": "RabbitMQ",
+      "type": "queue",
+      "responsibility": "Manages asynchronous event-driven communication between services.",
+      "tech": "RabbitMQ",
+      "port": 5672
+    }
+  ],
+  "data_flow": [
+    {
+      "from": "Frontend",
+      "to": "User Service",
+      "protocol": "REST",
+      "data": "User registration and login requests."
+    },
+    {
+      "from": "User Service",
+      "to": "PostgreSQL Database",
+      "protocol": "REST",
+      "data": "User data storage."
+    },
+    {
+      "from": "Frontend",
+      "to": "Habit Service",
+      "protocol": "REST",
+      "data": "Habit management requests."
+    },
+    {
+      "from": "Habit Service",
+      "to": "PostgreSQL Database",
+      "protocol": "REST",
+      "data": "Habit data storage."
+    },
+    {
+      "from": "Habit Service",
+      "to": "Analytics Service",
+      "protocol": "MQ",
+      "data": "Habit tracking events."
+    },
+    {
+      "from": "Analytics Service",
+      "to": "PostgreSQL Database",
+      "protocol": "REST",
+      "data": "Analytics results storage."
+    }
+  ],
+  "api_design": {
+    "style": "REST",
+    "versioning": "v1",
+    "auth": "JWT"
+  },
+  "database_design": {
+    "primary_db": "PostgreSQL",
+    "cache": "Redis"
+  },
+  "security_architecture": {
+    "auth_method": "JWT",
+    "encryption": "TLS 1.3"
+  },
+  "scalability": {
+    "horizontal_scaling": true,
+    "cdn": true
+  },
+  "deployment": {
+    "cloud": "AWS",
+    "container": "Docker+Kubernetes",
+    "ci_cd": "GitHub Actions"
+  },
+  "monitoring": {
+    "apm": "New Relic",
+    "logging": "structured"
+  },
+  "recommended": "Node.js with Express for backend, React for frontend, and PostgreSQL for database.",
+  "decision_rationale": "The microservices architecture supports building independently scalable services, which aligns well with the need for supporting high concurrency and modular development. Express is chosen for its maturity and ecosystem support in Node.js. React is recommended for highly interactive and dynamic front-end development, and PostgreSQL is chosen due to its ACID compliance and robustness in handling structured data.",
+  "frontend_tech": "React",
+  "backend_tech": "Express",
+  "database_tech": "PostgreSQL",
+  "cache_tech": "Redis"
+}
