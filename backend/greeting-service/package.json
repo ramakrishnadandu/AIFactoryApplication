@@ -1,0 +1,45 @@
+{
+  "name": "greeting-service",
+  "version": "1.0.0",
+  "description": "Service responsible for generating and sending personalized greetings based on user events.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "jest"
+  },
+  "author": "sayhi Team",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemailer": "^6.7.2",
+    "mongoose": "^6.2.4",  // For database interactions, assuming MongoDB
+    "dotenv": "^16.0.3",  // For environment variables
+    "body-parser": "^1.19.1",
+    "cors": "^2.8.5"      // To handle cross-origin requests
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15", // To automatically restart the server during development
+    "jest": "^29.0.3",    // For running unit tests
+    "supertest": "^6.2.4",// For testing HTTP
+    "eslint": "^8.23.1"   // For linting the codebase
+  },
+  "engines": {
+    "node": ">=14.17.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sayhi/greeting-service.git"
+  },
+  "keywords": [
+    "greetings",
+    "personalized",
+    "events",
+    "express",
+    "microservice"
+  ],
+  "config": {
+    "port": 8001,
+    "mongoURI": "mongodb://localhost:27017/greetings"
+  }
+}
