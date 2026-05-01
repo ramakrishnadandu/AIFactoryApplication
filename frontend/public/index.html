@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SayHi App</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+</head>
+
+<body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+
+    <!-- Fallback scripts if main bundle fails -->
+    <script>
+        window.addEventListener('error', function (e) {
+            console.error('Error loading script:', e);
+            alert('An error occurred while loading the page. Please try refreshing.');
+        });
+    </script>
+
+    <!-- React main bundle -->
+    <script type="text/javascript" src="/static/js/main.js" crossorigin></script>
+</body>
+
+</html>
