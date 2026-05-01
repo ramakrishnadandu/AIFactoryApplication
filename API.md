@@ -1,124 +1,77 @@
-# API Documentation for Project SayHi
+# API Documentation - sayhi
 
-Welcome to the API documentation for SayHi, a dynamic greeting app that coordinates wishes on festivals and birthdays. This document details all available endpoints, including required authentication, request structures, successful response formats, and error codes.
+## Introduction
+The sayhi API provides endpoints to handle user registration, user login, and dynamic greetings. This document outlines all the available endpoints, their methods, authentication requirements, request body formats, and possible responses.
 
 ## Endpoints
 
 ### 1. User Registration
 
-- **Endpoint**: `/api/v1/users`
-- **Method**: POST
-- **Description**: Register a new user for the SayHi platform.
-- **Authentication Required**: No
-- **Request Body**:
+- **Method + Path**: `POST /api/v1/users`
+- **Description**: This endpoint registers a new user in the sayhi application.
+- **Authentication**: Not required
+- **Request Body (JSON)**:
+
   ```json
   {
-    "name": "string",
+    "firstName": "string",
+    "lastName": "string",
     "email": "string",
     "password": "string"
   }
   
-- **Response**:
+
+- **Response (JSON)**:
+
   ```json
   {
-    "message": "User registered successfully",
-    "user_id": "string"
+    "data": {
+      "userId": "string"
+    }
   }
   
+
 - **Error Codes**:
-  - `400`: Invalid input data
-  - `409`: Email already exists
+  - `400`: Bad Request / Validation Error
+  - `409`: Conflict / User Already Exists
+  - `500`: Internal Server Error
 
-### 2. Fetch Personalized Greetings
+### 2. User Login
 
-- **Endpoint**: `/api/v1/greetings`
-- **Method**: GET
-- **Description**: Retrieve a list of personalized greetings for the authenticated user.
-- **Authentication Required**: Yes
-- **Request Body**: N/A
-- **Response**:
-  ```json
-  {
-    "greetings": [
-      {
-        "id": "string",
-        "message": "string",
-        "date": "string"
-      }
-    ]
-  }
-  
-- **Error Codes**:
-  - `401`: Unauthorized
+- **Method + Path**: `POST /api/v1/login`
+- **Description**: This endpoint allows a user to log into the sayhi application.
+- **Authentication**: Not required
+- **Request Body (JSON)**:
 
-### 3. Event Calendar Integration
-
-- **Endpoint**: `/api/v1/event_calendar`
-- **Method**: GET
-- **Description**: Access the user's event calendar with upcoming festivals and birthdays.
-- **Authentication Required**: Yes
-- **Request Body**: N/A
-- **Response**:
-  ```json
-  {
-    "events": [
-      {
-        "event_id": "string",
-        "name": "string",
-        "date": "string",
-        "type": "string"
-      }
-    ]
-  }
-  
-- **Error Codes**:
-  - `401`: Unauthorized
-
-### 4. Create Custom Greetings
-
-- **Endpoint**: `/api/v1/custom_greetings`
-- **Method**: POST
-- **Description**: Allows authenticated users to create custom greetings.
-- **Authentication Required**: Yes
-- **Request Body**:
-  ```json
-  {
-    "message": "string",
-    "for_date": "string"
-  }
-  
-- **Response**:
-  ```json
-  {
-    "message": "Custom greeting created successfully"
-  }
-  
-- **Error Codes**:
-  - `400`: Invalid input data
-  - `401`: Unauthorized
-
-### 5. Email Queue Management
-
-- **Endpoint**: `/api/v1/email_queue`
-- **Method**: POST
-- **Description**: Queue emails for sending greetings.
-- **Authentication Required**: Yes
-- **Request Body**:
   ```json
   {
     "email": "string",
-    "subject": "string",
-    "body": "string"
+    "password": "string"
   }
   
-- **Response**:
+
+- **Response (JSON)**:
+
   ```json
   {
-    "status": "Email queued successfully"
+    "data": {
+      "token": "string"
+    }
   }
   
-- **Error Codes**:
-  - `400`: Invalid input data
-  - `401`: Unauthorized
 
-This documentation provides a comprehensive overview of all endpoint functionalities available in SayHi. Ensure to handle error responses appropriately and confirm authentication where required.
+- **Error Codes**:
+  - `400`: Bad Request / Validation Error
+  - `401`: Unauthorized / Invalid Credentials
+  - `500`: Internal Server Error
+
+## Notes
+
+- All responses and requests that require data should use JSON format.
+- Ensure that proper validation is performed on the client-side to prevent sending invalid data.
+- Error messages should be descriptive enough to guide the client on the required action.
+- Future versions may introduce authentication on certain endpoints as user data and security needs grow.
+
+## Conclusion
+
+This API provides the core functionalities required for basic user management and dynamic greetings in the sayhi application. Integration of a CI/CD pipeline is planned for automated deployments and testing.
