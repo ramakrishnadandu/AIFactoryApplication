@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  user-service:
+    image: node:14
+    container_name: user-service
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./user-service:/usr/src/app
+    working_dir: /usr/src/app
+    command: bash -c "npm install && npm start"
+    depends_on:
+      - db
+      - mailer
+    networks:
+      - app-network
+   
+  greeting-service:
+    image: node:14
+    container_name: greeting-service
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./greeting-service:/usr/src/app
+    working_dir: /usr/src/app
+    command: bash -c "npm install && npm start"
+    depends_on:
+      - user-service
+    networks:
+      - app-network
+
+  event-calendar-service:
+    image: node:14
+    container_name: event-calendar-service
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./event-calendar-service:/usr/src/app
+    working_dir: /usr/src/app
+    command: bash -c "npm install && npm start"
+    depends_on:
+      - user-service
+    networks:
+      - app-network
+
+  db:
+    image: postgres:13
+    container_name: db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: sayhi
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  mailer:
+    image: mailhog/mailhog
+    container_name: mailer
+    ports:
+      - "8025:8025" # MailHog UI
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  pgdata:
