@@ -1,0 +1,50 @@
+{
+  "name": "sayhi-frontend",
+  "version": "1.0.0",
+  "description": "Frontend of Sayhi - A dynamic greeting app for festivals and birthdays",
+  "main": "index.js",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.8.1",
+    "axios": "^1.2.0",
+    "redux": "^4.2.0",
+    "react-redux": "^8.0.4",
+    "redux-thunk": "^2.4.2",
+    "styled-components": "^5.3.6",
+    "@mui/material": "^5.11.0",
+    "@mui/icons-material": "^5.11.0",
+    "date-fns": "^2.29.3"
+  },
+  "devDependencies": {
+    "eslint": "^8.24.0",
+    "eslint-plugin-react": "^7.31.0",
+    "eslint-plugin-jsx-a11y": "^6.6.1",
+    "eslint-plugin-import": "^2.26.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
+  "keywords": ["greetings", "events", "personalized greetings", "event calendar"],
+  "author": "Your Company Name",
+  "license": "MIT"
+}
