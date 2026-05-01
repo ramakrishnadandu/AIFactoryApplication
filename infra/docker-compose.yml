@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  user-service:
+    image: express-user-service:latest
+    build:
+      context: ./services/user
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - NODE_ENV=production
+      - PORT=8000
+      - DB_HOST=user-db
+      - DB_PORT=5432
+      - DB_USER=user
+      - DB_PASS=password
+    depends_on:
+      - user-db
+
+  auth-service:
+    image: express-auth-service:latest
+    build:
+      context: ./services/auth
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    environment:
+      - NODE_ENV=production
+      - PORT=8001
+      - SECRET_KEY=your-secret-key
+      - TOKEN_EXPIRY=3600
+      - DB_HOST=auth-db
+      - DB_PORT=5432
+      - DB_USER=auth
+      - DB_PASS=password
+    depends_on:
+      - auth-db
+
+  frontend:
+    image: react-frontend:latest
+    build:
+      context: ./services/frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - REACT_APP_USER_SERVICE_URL=http://user-service:8000
+      - REACT_APP_AUTH_SERVICE_URL=http://auth-service:8001
+
+  user-db:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=userdb
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - user-db-data:/var/lib/postgresql/data
+
+  auth-db:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=authdb
+      - POSTGRES_USER=auth
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - auth-db-data:/var/lib/postgresql/data
+
+volumes:
+  user-db-data:
+  auth-db-data:
