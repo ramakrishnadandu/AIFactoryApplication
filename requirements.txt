@@ -1,0 +1,5 @@
+# requirements.txt
+# Add your project dependencies here, for example:
+pytest
+
+# Add other dependencies as needed
