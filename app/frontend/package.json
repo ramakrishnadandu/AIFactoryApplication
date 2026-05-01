@@ -1,0 +1,67 @@
+{
+  "name": "sayhi-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for SayHi App - Dynamic Greetings",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.14.1",
+    "axios": "^1.5.1",
+    "styled-components": "^5.3.10"
+  },
+  "devDependencies": {
+    "eslint": "^8.50.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-config-airbnb": "^19.0.5",
+    "prettier": "^3.2.3",
+    "eslint-config-prettier": "^8.10.0",
+    "eslint-plugin-prettier": "^5.1.0"
+  },
+  "proxy": "http://localhost:8000",
+  "keywords": [
+    "dynamic greetings",
+    "react",
+    "user registration",
+    "user login",
+    "festival greetings",
+    "birthday greetings"
+  ],
+  "author": "SayHi Team",
+  "license": "MIT",
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=7.0.0"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "setupFilesAfterEnv": ["<rootDir>/src/setupTests.js"]
+  },
+  "eslintConfig": {
+    "extends": ["airbnb", "prettier"],
+    "rules": {
+      "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+      "import/no-extraneous-dependencies": ["error", { "devDependencies": true }]
+    }
+  }
+}
