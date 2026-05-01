@@ -1,55 +1,66 @@
 name: Auto Fix and Prevent Failures
 
 on:
-  workflow_run:
-    workflows: [CI/CD Pipeline]
-    types:
-      - completed
+workflow_run:
+workflows: ["CI/CD Pipeline"]
+types: [completed]
+workflow_dispatch:   # 👈 allows manual run
+
+permissions:
+contents: write      # 👈 required to push changes
+pull-requests: write
 
 jobs:
-  auto_fix:
-    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+auto_fix:
+if: ${{ github.event.workflow_run.conclusion == 'failure' || github.event_name == 'workflow_dispatch' }}
+runs-on: ubuntu-latest
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
+```
+steps:
+  - name: Checkout Repository (sayhi-dev branch)
+    uses: actions/checkout@v3
+    with:
+      ref: sayhi-dev   # 👈 target branch
 
-      - name: Install dependencies
-        run: npm ci
+  - name: Setup Node.js
+    uses: actions/setup-node@v3
+    with:
+      node-version: '18'   # 👈 updated
 
-      - name: Run auto-fix script
-        run: |
-          # Assuming an npm script named 'fix' exists to fix lint/style/test issues automatically
-          npm run fix || echo "Fix script completed"
+  - name: Install dependencies
+    run: npm ci
 
-      - name: Commit and push fixes
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          if git diff --cached --quiet; then
-            echo "No fixes to commit"
-          else
-            git commit -m "chore: auto fix issues after CI failure"
-            git push origin HEAD:${GITHUB_REF#refs/heads/}
-          fi
+  - name: Run auto-fix script
+    id: autofix   # 👈 important for outcome tracking
+    run: |
+      npm run fix || echo "Fix script completed with issues"
 
-      - name: Comment on original PR
-        if: github.event.workflow_run.pull_requests[0]
-        uses: peter-evans/create-or-update-comment@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{ github.repository }}
-          issue-number: ${{ github.event.workflow_run.pull_requests[0].number }}
-          body: |
-            ⚙️ This comment is from the auto-fix workflow.
-            The workflow detected a failure in the CI/CD pipeline and attempted to automatically fix the issues and push a commit.
+  - name: Commit and push fixes
+    run: |
+      git config user.name "github-actions[bot]"
+      git config user.email "github-actions[bot]@users.noreply.github.com"
+      git add .
 
-      - name: Notify failure if fix unsuccessful
-        if: ${{ steps.auto-fix.outcome != 'success' }}
-        run: echo "Auto-fix did not resolve all issues. Manual intervention required."
+      if git diff --cached --quiet; then
+        echo "No fixes to commit"
+      else
+        git commit -m "chore: auto fix issues after CI failure"
+        git push origin sayhi-dev   # 👈 explicit branch push
+      fi
+
+  - name: Comment on original PR
+    if: github.event.workflow_run.pull_requests[0]
+    uses: peter-evans/create-or-update-comment@v2
+    with:
+      token: ${{ secrets.GITHUB_TOKEN }}
+      repository: ${{ github.repository }}
+      issue-number: ${{ github.event.workflow_run.pull_requests[0].number }}
+      body: |
+        ⚙️ Auto-fix attempted on branch `sayhi-dev`.
+
+        The CI/CD pipeline failed, and this workflow tried to fix issues automatically and pushed changes.
+
+  - name: Notify failure if fix unsuccessful
+    if: ${{ steps.autofix.outcome != 'success' }}
+    run: echo "Auto-fix did not resolve all issues. Manual intervention required."
+```
