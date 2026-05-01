@@ -1,0 +1,50 @@
+{
+  "name": "UserService",
+  "version": "1.0.0",
+  "description": "Handles user registration and login for the sayhi app.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "mocha tests/**/*.test.js",
+    "build": "babel src -d dist",
+    "lint": "eslint src --fix",
+    "dev": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.0.0",
+    "jsonwebtoken": "^9.0.0",
+    "bcryptjs": "^2.4.3",
+    "nodemailer": "^6.9.0",
+    "dotenv": "^16.0.3"
+  },
+  "devDependencies": {
+    "mocha": "^10.2.0",
+    "chai": "^4.3.7",
+    "nodemon": "^3.0.1",
+    "eslint": "^8.49.0",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/sayhi-userservice.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/sayhi-userservice/issues"
+  },
+  "homepage": "https://github.com/yourusername/sayhi-userservice#readme",
+  "keywords": [
+    "user",
+    "registration",
+    "login",
+    "express",
+    "user-service"
+  ],
+  "private": false
+}
