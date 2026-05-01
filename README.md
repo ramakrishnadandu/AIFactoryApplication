@@ -1,33 +1,32 @@
 # SayHi
 
-![GitHub license](https://img.shields.io/github/license/yourusername/sayhi)
-![GitHub contributors](https://img.shields.io/github/contributors/yourusername/sayhi)
-![GitHub stars](https://img.shields.io/github/stars/yourusername/sayhi)
-![GitHub issues](https://img.shields.io/github/issues/yourusername/sayhi)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Node.js CI](https://github.com/yourusername/sayhi/actions/workflows/node.js.yml/badge.svg)](https://github.com/yourusername/sayhi/actions/workflows/node.js.yml)
 
-SayHi is a dynamic greeting application that personalizes your festival and birthday wishes. It smoothly integrates user data, event calendars, and allows custom greetings, making every occasion special.
+## Description
+
+SayHi is a dynamic greeting application designed to send personalized greetings on festivals, birthdays, and other special occasions. It enhances user interaction by providing tailored messages via an engaging user interface.
 
 ## Features
 
-- **User Registration**: Seamless and secure user sign-up and login.
-- **Personalized Greetings**: Tailor-made wishes based on user preferences and important dates.
-- **Event Calendar Integration**: Sync with calendars to never miss an important event.
-- **Custom Greetings**: Create and send unique message templates for your loved ones.
+- **User Registration**: Users can sign up to create an account.
+- **User Login**: Registered users can log in to access personalized features.
+- **Dynamic Greetings**: Send greetings on various events and personalize them based on user data.
+- **CI/CD Pipeline Integration**: Continuous Integration and Deployment setup for seamless updates.
 
 ## Tech Stack
 
 - **Frontend**: React
-- **Backend**: Express
-- **Database**: MongoDB
-- **Containerization**: Docker
-- **Version Control**: Git
-- **Package Manager**: NPM
+- **Backend**: Express.js
+- **CI/CD**: GitHub Actions
 
 ## Prerequisites
 
-- Node.js v14.x or higher
-- npm v6.x or higher
-- Docker (optional, for containerized setup)
+Before you begin, ensure you have met the following requirements:
+
+- Node.js and npm installed on your machine.
+- Docker installed on your machine if you want to run using Docker.
+- A GitHub account for CI/CD.
 
 ## Quick Start
 
@@ -44,78 +43,62 @@ SayHi is a dynamic greeting application that personalizes your festival and birt
    npm install
    
 
-3. **Set up environment variables**
-
-   Create a `.env` file in the root directory and configure your variables.
-
-4. **Run the application**
+3. **Run the application**
 
    ```bash
    npm start
    
 
-   The app will be available at `http://localhost:3000`.
+4. **Navigate to**
+
+   
+   http://localhost:3000
+   
 
 ## Docker Setup
 
-1. **Build Docker image**
+To run the application using Docker:
+
+1. **Build the Docker image**
 
    ```bash
    docker build -t sayhi-app .
    
 
-2. **Run Docker container**
+2. **Run the Docker container**
 
    ```bash
    docker run -p 3000:3000 sayhi-app
    
 
-   Access the application at `http://localhost:3000`.
-
 ## Environment Variables
 
-| Variable            | Description                      |
-|---------------------|----------------------------------|
-| `PORT`              | Port number to run the server    |
-| `MONGODB_URI`       | MongoDB connection string        |
-| `JWT_SECRET`        | Secret key for JWT authentication|
-| `EMAIL_SERVICE_API` | API key for email service        |
-| `FRONTEND_URL`      | URL of the frontend app          |
+| Variable Name        | Description                 | Example             |
+|----------------------|-----------------------------|---------------------|
+| `PORT`               | Port number for server      | `3000`              |
+| `DB_HOST`            | Database host               | `localhost`         |
+| `DB_USER`            | Database username           | `user`              |
+| `DB_PASS`            | Database password           | `password`          |
+| `JWT_SECRET`         | JWT secret for auth         | `your_jwt_secret`   |
+| `NODE_ENV`           | Node environment            | `development`       |
 
 ## API Overview
 
-- **`POST /api/v1/users/register`**: Register a new user.
-- **`POST /api/v1/users/login`**: Authenticate a user.
-- **`GET /api/v1/greetings/{userId}`**: Retrieve all greetings for a user.
-- **`GET /api/v1/event_calendar`**: Access integrated events.
-- **`POST /api/v1/custom_greetings/{userId}`**: Create a custom greeting.
-- **`POST /api/v1/email_queue/send`**: Queue emails for sending.
+- **POST /api/v1/users**: Register a new user.
+- **POST /api/v1/login**: Login for existing users.
 
 ## Deployment Guide
 
-1. Ensure all environment variables are set correctly for production.
-2. Build the project:
-
-   ```bash
-   npm run build
-   
-
-3. Start the production server:
-
-   ```bash
-   npm run start:prod
-   
-
-4. For Docker, push the image to a registry and deploy using your preferred DevOps tools or hosting service.
+- Ensure your project is correctly hosted on a platform such as Heroku or Vercel.
+- Push changes to the `main` branch to trigger the CI/CD pipeline.
+- Make sure the environment variables in your host platform are correctly set up for the application to run.
 
 ## Contributing
 
-Contributions are welcome! Please follow these steps:
-
 1. Fork the repository.
-2. Create a new branch (`git checkout -b feature/YourFeature`).
-3. Commit your changes (`git commit -m 'Add your feature'`).
-4. Push to the branch (`git push origin feature/YourFeature`).
-5. Open a Pull Request.
+2. Create your feature branch: `git checkout -b my-new-feature`
+3. Commit your changes: `git commit -m 'Add some feature'`
+4. Push to the branch: `git push origin my-new-feature`
+5. Open a pull request.
 
-Please ensure your code is well-documented and includes test coverage for new functionality.
+We welcome contributions from everyone. Feel free to enhance the application or fix issues. Please follow the established code style guidelines and tests.
