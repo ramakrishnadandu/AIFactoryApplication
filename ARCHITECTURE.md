@@ -1,79 +1,92 @@
-# sayhi System Architecture
+# ARCHITECTURE.md
 
 ## System Overview
 
-The `sayhi` application is a microservices-based dynamic greeting platform that provides users with personalized greetings for festivals, birthdays, and custom events. It leverages a series of APIs to manage users, generate greetings, integrate with external calendars, and monitor greetings via email.
+The `sayhi` application is designed as a microservices architecture, allowing the separation of concerns and ease of scaling each component independently. Below is a high-level overview of the system architecture:
 
-+------------------+       +-------------------+      +--------------------+      
-|  User Service    |<----->|  Cache Service    |<---->|  Greeting Service  |      
-|  (express)       |       |  (Redis)          |      |  (express)         |
-+------------------+       +-------------------+      +--------------------+
-       |                                             |
-       v                                             v
-+-------------------+        +--------------------+
-|  Event Calendar   |<------>|  Custom Greetings  |
-|  Service          |        |  Service           |
-|  (express)        |        |  (express)         |
-+-------------------+        +--------------------+
-        |                                          ^
-        v                                          |
-+-------------------+      +-----------------------+
-|   Email Queue     |<-----|       Database        |
-|  (Amazon SQS)     |      |       (MongoDB)       |
-+-------------------+      +-----------------------+
++----------------+        +-----------------+
+| Frontend (React)|        | CacheService    |
+|                |        | (Redis)         |
++--------+-------+        +---------+-------+
+         |                          |
+         | REST                     | REST
+         v                          v
++--------+--------+    +-------------+-------------+
+| UserService    |    | GreetingService          |
+| (Express)      |    | (Express)                |
++--------+-------+    +-------------+-------------+
+         |                          |
+         | REST                     | REST
+         v                          v
++--------+--------+        +--------+--------+
+| UserDB (PostgreSQL)|     | NotificationQueue |
+|                   |     | (Amazon SQS)      |
++---------+---------+     +--------+---------+
+          |                           |
+          | REST                      | MQ
+          v                           v
++---------+---------+        +--------+---------+
+| EmailService     |        | NotificationQueue |
+| (Express)        |        |                  |
++------------------+        +------------------+
 
 ## Component Descriptions
 
-- **User Service**: Handles all operations related to user management, including registration, authentication, and profile management. Runs on Node.js with Express and uses JWT for authentication.
+1. **Frontend (React)**: Provides the user interface and sends HTTP requests to the backend services.
+   
+2. **UserService (Express)**: Handles user authentication (registration and login), validates user credentials, and interacts with the `UserDB`.
 
-- **Greeting Service**: Responsible for generating and dispatching personalized greetings based on users' events. Interacts with the Email Queue to send these greetings.
+3. **GreetingService (Express)**: Generates personalized greeting messages based on user data retrieved from `UserDB`.
 
-- **Event Calendar Service**: Integrates with external calendar services to synchronize event data, ensuring the app keeps up-to-date with all relevant festivals and personal events.
+4. **EmailService (Express)**: Manages the sending of emails, including registration confirmations and greeting messages. It interacts with `NotificationQueue` to ensure messages are reliably sent.
 
-- **Custom Greetings Service**: Allows users to create and manage their personalized greeting messages.
+5. **UserDB (PostgreSQL)**: Stores user data, including credentials and profile information.
 
-- **Email Queue**: Implements an Amazon SQS-based system to queue and manage the sending of emails, both for confirmations and greeting messages.
+6. **NotificationQueue (Amazon SQS)**: A queue that holds email tasks to ensure reliable delivery and to decouple the `EmailService` from the `UserService`.
 
-- **Cache Service**: Utilizes Redis to cache session data and greetings, enhancing performance by reducing database load.
-
-- **Database**: Uses MongoDB to store user profiles, greeting records, and calendar entries. The database is designed to handle high-read scenarios efficiently.
+7. **CacheService (Redis)**: Caches frequently accessed data related to user sessions and preferences to speed up API responses.
 
 ## Data Flow
 
-1. **User Registration and Authentication**: 
-   - User Service handles registration and authentication requests.
-   - Authentication tokens (JWT) are issued upon successful login or registration.
+Each interaction within the system is delineated by specific data flows:
 
-2. **Personalized Greeting Dispatch**:
-   - Greeting Service creates personalized messages and enqueues them in the Email Queue.
-   - Once queued, the messages are sent out as emails.
-
-3. **Event Synchronization**:
-   - Event Calendar Service fetches external event data and updates the MongoDB database.
-
-4. **Custom Greetings Operations**:
-   - Custom Greetings Service allows CRUD operations on user-defined greetings.
-   - Changes are immediately updated in the database and cached.
-
-5. **Caching**:
-   - User session data and frequently accessed greetings are stored in Redis cache for quick retrieval.
+- **Frontend** interacts with **UserService** through RESTful APIs for user registration and login.
+- **UserService** communicates with **UserDB** to store and authenticate user credentials.
+- **UserService** sends requests to **EmailService** for sending email notifications upon registration or other events.
+- **GreetingService** fetches user details from **UserDB** to create personalized greetings.
+- **EmailService** utilizes **NotificationQueue** to send out emails asynchronously.
+- **NotificationQueue** processes and forwards email tasks to **EmailService** for execution.
 
 ## Database Schema
 
-The database schema in MongoDB includes several collections such as Users, Greetings, Events, and CustomGreetings, each designed to store related information efficiently. This schema facilitates easy lookups and flexible updates, crucial for dynamic data interaction.
+### UserDB (PostgreSQL)
+
+- **Users Table**:
+  - `id`: UUID (Primary Key)
+  - `username`: VARCHAR(255)
+  - `email`: VARCHAR(255)
+  - `password`: VARCHAR(255) (hashed)
+  - `created_at`: TIMESTAMPTZ
+  - `updated_at`: TIMESTAMPTZ
 
 ## Security Model
 
-- **Authentication**: Employs JWT for secure authentication. Tokens are checked for each API request to ensure user legitimacy and session validity.
-- **Encryption**: All data in transit is encrypted using TLS 1.3 to ensure privacy and data integrity over the network.
+- **Authentication**: JSON Web Tokens (JWT) are used for user authentication, securing API endpoints.
+- **Encryption**: All communications are encrypted using TLS 1.3 to ensure data integrity and privacy.
 
 ## Scalability
 
-- **Horizontal Scaling**: The microservices architecture is inherently designed to scale horizontally. Services can be deployed across multiple instances using Kubernetes, allowing for dynamic scaling based on server load.
-- **CDN**: A Content Delivery Network is employed to optimize the delivery of static content, reducing latency and enhancing user experiences globally.
+- **Horizontal Scaling**: Each service can be independently scaled out horizontally across multiple nodes to handle increased load.
+- **CDN Integration**: Serving static assets via a Content Delivery Network (CDN) to reduce latency and increase application speed.
 
-## Deployment & Monitoring
+## Deployment and CI/CD Pipeline
 
-- **Deployment**: The solution is deployed on AWS, utilizing Docker containers orchestrated by Kubernetes. This provides a resilient infrastructure capable of scaling with demand.
-- **Continuous Integration/Continuous Deployment (CI/CD)**: Managed through GitHub Actions, ensuring rapid deployment of changes and updates to the system.
-- **Monitoring**: Comprehensive monitoring strategies (potentially using CloudWatch or Prometheus) ensure the health and performance of the application services are continuously checked.
+- **Deployment Environment**: The application is containerized using Docker, orchestrated with Kubernetes, and deployed on AWS.
+- **CI/CD Pipeline**: GitHub Actions is used to automate the testing, building, and deployment of the application to ensure rapid and reliable delivery.
+
+## Monitoring and Logging
+
+- **Application Performance Monitoring (APM)**: New Relic is used to monitor application performance, providing insights into app behavior and alerting on issues.
+- **Structured Logging**: Logs are structured and centralized to aid in debugging and monitoring system activities.
+
+This document provides a comprehensive overview of the architecture, components, and strategies employed in the `sayhi` application. Each piece of the system is designed to be resilient, scalable, and efficient to meet the demands of dynamic greeting functionalities.
