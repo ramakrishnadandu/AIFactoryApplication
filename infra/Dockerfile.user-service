@@ -1,0 +1,26 @@
+# Dockerfile for User Service
+
+# Use Node.js as the base image since the service is built with Express.js
+FROM node:14
+
+# Create and set the working directory
+WORKDIR /usr/src/app
+
+# Copy package.json and package-lock.json files to the working directory
+# This allows us to leverage Docker caching, so npm install is only run when these files change
+COPY package*.json ./
+
+# Install Node.js dependencies
+RUN npm install
+
+# Copy the rest of the application source code to the working directory
+COPY . .
+
+# Expose the port that the service will listen on
+EXPOSE 8000
+
+# Set the environment variable for production mode
+ENV NODE_ENV=production
+
+# Start the Express.js application
+CMD ["node", "server.js"]
