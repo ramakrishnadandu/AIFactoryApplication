@@ -1,0 +1,76 @@
+# Dockerfile for Auth Service
+
+# Use the official Node.js image.
+# Pin the version to the latest LTS version you have tested the application with.
+FROM node:18.16.0-alpine
+
+# Set the working directory inside the container
+WORKDIR /usr/src/app
+
+# Install dependencies
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# where available (npm@5+)
+COPY package*.json ./
+
+# Installing production dependencies for smaller image size
+RUN npm ci --only=production
+
+# Bundle app source
+COPY . .
+
+# Expose the application's port
+# Auth Service runs on port 8001
+EXPOSE 8001
+
+# Prepare the environment variables for production
+ENV NODE_ENV=production
+
+# Start the application
+CMD ["node", "index.js"]
+
+# Label the image
+LABEL maintainer="Your Name <your-email@example.com>"
+LABEL description="Dockerfile for Auth Service in syhionce"
+
+# Add a HEALTHCHECK to ensure the container is running correctly
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 CMD curl -f http://localhost:8001/health || exit 1
+
+# Use a non-root user for security
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser
+
+# Handle signals properly for graceful shutdown
+# Use tini as init system to manage signal forwarding
+RUN apk add --no-cache tini
+
+ENTRYPOINT ["/sbin/tini", "--"]
+
+# Make sure we are not running as root user
+RUN chown -R appuser:appgroup /usr/src/app
+
+# Clean up unnecessary files after installation
+RUN npm cache clean --force
+
+# Using a multi-stage build to create lighter production containers
+# No dev dependencies or build tools are necessary in the final image
+
+# Always explicitly specify base images by their digest in production Dockerfiles
+FROM node@sha256:945b4480b568d0c0debc9318cd4f5904ffb67c47dcb4d82913c88507ea044f7a as deps-builder
+
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+
+RUN npm ci
+
+COPY . .
+
+FROM node@sha256:1b634e3d29b9c4c3082d06eaaea34c2e2485f3aec53bbd08ccbece7f44adf90f
+
+WORKDIR /usr/src/app
+
+COPY --from=deps-builder /usr/src/app .
+
+EXPOSE 8001
+
+CMD ["node", "index.js"]
