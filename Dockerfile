@@ -1,5 +1,5 @@
-# Use python:3.9 as base image to match cache for python
-FROM python:3.9 AS build-python
+# Use python:3.10 as base image to ensure availability
+FROM python:3.10 AS build-python
 
 # Install Node.js 18 manually
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
