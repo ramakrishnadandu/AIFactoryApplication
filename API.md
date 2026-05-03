@@ -1,0 +1,1 @@
+{"stub": true, "stage": "self_heal_fix", "message": "No AI backend available. Configure Ollama (free) or add API keys in Settings.", "output": {}}
