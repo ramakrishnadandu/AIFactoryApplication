@@ -1,2 +1,2 @@
-docker==6.1.3
-requests==2.31.0
+requirements.txt        (prod)
+requirements-dev.txt    (testing, linting)

@@ -1,3 +1,28 @@
-# requirements.txt
-Docker==6.1.0
-requests==2.28.2
+name: CI
+
+on:
+  push:
+    branches: [ master-to-do/dev ]
+  pull_request:
+    branches: [ master-to-do/dev ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run tests
+      run: pytest -v
