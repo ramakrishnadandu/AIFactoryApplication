@@ -31,3 +31,7 @@ COPY --from=build-python /app/dist /usr/share/nginx/html
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
+
+# Note: Docker Hub login credentials should be provided in the CI/CD pipeline
+# and not inside this Dockerfile. Ensure the CI pipeline performs 'docker login'
+# with username and password before build or push steps.
