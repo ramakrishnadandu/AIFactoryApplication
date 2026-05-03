@@ -1,40 +1,33 @@
-# Start by defining the base image for the build stage
-FROM node:18 AS build-stage
+# Use python:3.9 as base image to match cache for python
+FROM python:3.9 AS build-python
 
-# Install Python 3.9 and pip explicitly to match cached version
-RUN apk add --no-cache python3=3.9.16-r0 py3-pip && \
-    ln -sf python3 /usr/bin/python
+# Install Node.js 18 manually
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs
 
-# Set the working directory
+# Set working directory
 WORKDIR /app
 
-# Copy the package.json and package-lock.json (or yarn.lock) to install dependencies
+# Copy package files and install node dependencies
 COPY package*.json ./
-
-# Install app dependencies
 RUN npm install
 
-# Copy the rest of the application code
+# Copy python requirements
+COPY requirements.txt ./
+# Install python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy rest of app
 COPY . .
 
-# Install python dependencies here if requirements.txt or similar exists
-# Assuming a requirements.txt file exists in project root
-RUN if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
-
-# Build the application
+# Build app
 RUN npm run build
 
-# Start a new stage from a smaller base image for deployment
+# Use nginx alpine for production
 FROM nginx:alpine AS production-stage
 
-# Copy the built application from the previous stage
-COPY --from=build-stage /app/dist /usr/share/nginx/html
+COPY --from=build-python /app/dist /usr/share/nginx/html
 
-# Copy custom nginx configuration if any
-# COPY nginx.conf /etc/nginx/nginx.conf  (uncomment and edit this line if you have a custom nginx configuration)
-
-# Expose the port the app runs on
 EXPOSE 80
 
-# Start nginx server
 CMD ["nginx", "-g", "daemon off;"]
