@@ -1,0 +1,7 @@
+# requirements.txt
+# This file should list all necessary dependencies for the project.
+
+# Example dependencies:
+# requests
+# flask
+# pytest
