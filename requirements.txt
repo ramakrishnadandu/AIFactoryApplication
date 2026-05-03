@@ -1,2 +1,2 @@
-# Add this line:
-missing-package
+docker==6.0.0
+requests==2.28.2
