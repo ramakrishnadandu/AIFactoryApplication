@@ -1,0 +1,16 @@
+fastapi
+uvicorn
+pydantic
+requests
+httpx
+sqlalchemy
+databases
+jinja2
+python-dotenv
+loguru
+pytest
+pytest-asyncio
+pytest-cov
+black
+isort
+flask
