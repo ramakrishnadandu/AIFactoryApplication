@@ -1,5 +1,5 @@
-# List your project's dependencies here
+# Requirements file
+# Ensure to list all necessary packages here.
 # Example:
-flask==2.0.1
 requests==2.26.0
-pytest==6.2.5
+numpy==1.21.2
