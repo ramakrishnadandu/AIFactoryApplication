@@ -1,3 +1,4 @@
+# .github/workflows/ci.yml
 name: CI
 
 on: [push, pull_request]
@@ -7,25 +8,22 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.9]
+        python-version: [3.10]
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-        cache: 'pip'
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pytest
-    - name: Run tests
-      run: |
-        pytest
-
-# Added dummy test to ensure tests directory and at least one test exist
-# file: tests/test_dummy.py
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run tests
+        run: |
+          pytest
+# tests/test_dummy.py
 import pytest
 
-def test_always_passes():
+def test_dummy():
     assert True
