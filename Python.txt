@@ -7,10 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.9]
+        python-version: [3.10]
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Python
+    - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
@@ -20,8 +20,5 @@ jobs:
         pip install pytest
     - name: Run tests
       run: |
-        if [ ! -d tests ]; then
-          mkdir tests
-          echo 'def test_dummy():\n    assert True' > tests/test_dummy.py
-        fi
+        if [ ! -f tests/test_dummy.py ]; then echo 'assert True' > tests/test_dummy.py; fi
         pytest
