@@ -1,2 +1,2 @@
+python==3.9.13
 missing-package==1.2.3
-other-package==4.5.6
