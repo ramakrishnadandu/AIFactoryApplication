@@ -1,3 +1,6 @@
-python==3.9.15
-pytest==7.3.1
-requests==2.28.2
+[build]
+python_version=3.9.12
+
+[requirements]
+pytest==7.3.2
+missing-package==1.2.3
