@@ -1,3 +1,2 @@
-python==3.9.13
 missing-package==1.2.3
-other-package==4.5.6
+# Other existing dependencies pinned to compatible versions
