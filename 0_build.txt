@@ -1,3 +1,5 @@
-python_version==3.9.17
-requests==2.28.2
-pytest==7.3.1
+# requirements.txt
+requests==2.28.1
+numpy==1.23.5
+# Added realistic package to replace the invalid 'missing-package'
+pytest==7.1.3
