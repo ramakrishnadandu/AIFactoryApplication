@@ -1,8 +1,2 @@
-[python]
-version = "3.9"
-
-[dependencies]
-python = "3.9"
-# Add actual packages here, replace 'missing-package' with valid package names
-numpy = "^1.23.0"
-pandas = "^1.5.0"
+missing-package==1.2.3
+other-package==4.5.6
