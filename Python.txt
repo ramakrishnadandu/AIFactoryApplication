@@ -1,10 +1,1 @@
-# Python version updated and dummy package removed from requirements
-python-version: 3.10
-
-# Dependencies installed without missing package
-install:
-  - pip install -r requirements.txt
-
-# Create test directory and dummy test file if none exist
-mkdir -p tests
-if [ ! -f tests/test_dummy.py ]; then echo 'def test_dummy():\n    assert True' > tests/test_dummy.py; fi
+pytest==7.3.2
