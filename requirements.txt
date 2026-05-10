@@ -1,2 +1,5 @@
-# Add this line:
-missing-package
+# Requirements file
+# Ensure to list all necessary packages here.
+# Example:
+requests==2.26.0
+numpy==1.21.2
