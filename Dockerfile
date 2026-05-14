@@ -1,10 +1,11 @@
-# Use python:3.9 as base image to match cache for python
-FROM python:3.9 AS build-python
+# Use python:3.9-slim as base image to ensure Python 3.9 is installed and consistent
+FROM python:3.9-slim AS build-python
 
 # Install Node.js 18 manually
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
-    apt-get update && \
-    apt-get install -y nodejs
+RUN apt-get update && apt-get install -y curl && \
+    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs python3-pip python3-venv && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
@@ -15,8 +16,8 @@ RUN npm install
 
 # Copy python requirements
 COPY requirements.txt ./
-# Install python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Install python dependencies and pytest
+RUN pip3 install --no-cache-dir -r requirements.txt pytest
 
 # Copy rest of app
 COPY . .
