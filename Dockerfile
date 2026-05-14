@@ -15,8 +15,9 @@ RUN npm install
 
 # Copy python requirements
 COPY requirements.txt ./
-# Install python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+
+# Ensure pytest is installed explicitly
+RUN pip install --no-cache-dir -r requirements.txt pytest
 
 # Copy rest of app
 COPY . .
