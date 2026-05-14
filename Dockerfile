@@ -3,6 +3,7 @@ FROM python:3.9 AS build-python
 
 # Install Node.js 18 manually
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get update && \
     apt-get install -y nodejs
 
 # Set working directory
